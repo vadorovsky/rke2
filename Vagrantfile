@@ -3,14 +3,14 @@
 
 # Adapted from https://github.com/containerd/containerd/pull/4451
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos/7"
+  config.vm.box = "centos/8"
   config.vm.provider :virtualbox do |v|
-    config.vm.box_url = "https://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-2004_01.VirtualBox.box"
+    config.vm.box_url = "https://cloud.centos.org/centos/8/vagrant/x86_64/images/CentOS-8-Vagrant-8.3.2011-20201204.2.x86_64.vagrant-virtualbox.box"
     v.memory = 2048
     v.cpus = 2
   end
   config.vm.provider :libvirt do |v|
-    config.vm.box_url = "https://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-2004_01.LibVirt.box"
+    config.vm.box_url = "https://cloud.centos.org/centos/8/vagrant/x86_64/images/CentOS-8-Vagrant-8.3.2011-20201204.2.x86_64.vagrant-libvirt.box"
     v.memory = 2048
     v.cpus = 2
   end
