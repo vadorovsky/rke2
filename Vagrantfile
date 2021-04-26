@@ -1,6 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+class GoVersionError < StandardError; end
+
+# Returns the Go version used by rke2. The version is parsed from the go.mod
+# file.
+def go_version()
+  File.open("go.mod") do |f|
+    f.each_line do |line|
+      if line.start_with?("go ") then
+        return line.split(" ")[-1]
+      end
+    end
+  end
+  raise GoVersionError.new("could not find Go version in go.mod")
+end
+
 # Adapted from https://github.com/containerd/containerd/pull/4451
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/8"
@@ -66,10 +81,10 @@ Vagrant.configure("2") do |config|
   # To re-run this provisioner, installing a different version of go:
   #   GO_VERSION="1.15rc2" vagrant up --provision-with=install-golang
   #
-  config.vm.provision "install-golang", type: "shell", run: "never" do |sh|
+  config.vm.provision "install-golang", type: "shell", run: "once" do |sh|
     sh.upload_path = "/tmp/vagrant-install-golang"
     sh.env = {
-        'GO_VERSION': ENV['GO_VERSION'] || "1.14.7",
+        'GO_VERSION': ENV['GO_VERSION'] || go_version(),
     }
     sh.inline = <<~SHELL
         #!/usr/bin/env bash
