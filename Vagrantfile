@@ -30,7 +30,13 @@ Vagrant.configure("2") do |config|
     v.cpus = 2
   end
 
-  config.vm.hostname = "rke2-test"
+  num_vms = ENV['RKE2_VAGRANT_NUM_VMS'] || 1
+  (1..num_vms).each do |i|
+    hostname = "rke2-test-#{i}"
+    config.vm.define hostname do |node|
+      node.vm.hostname = hostname
+    end
+  end
 
   # Disabled by default. To run:
   #   vagrant up --provision-with=upgrade-packages
